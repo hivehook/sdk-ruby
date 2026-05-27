@@ -5,7 +5,7 @@ require_relative "lib/hivehook/version"
 Gem::Specification.new do |s|
   s.name        = "hivehook"
   s.version     = Hivehook::VERSION
-  s.summary     = "Official Hivehook Ruby SDK"
+  s.summary     = "Official Ruby client for Hivehook, webhook infrastructure for modern teams (inbound and outbound)."
   s.description = "Ruby client for Hivehook, webhook infrastructure for modern teams (inbound and outbound). Manage sources, destinations, subscriptions, applications, endpoints, and verify inbound webhook signatures."
   s.authors     = ["Hivehook"]
   s.email       = ["hello@hivehook.com"]
