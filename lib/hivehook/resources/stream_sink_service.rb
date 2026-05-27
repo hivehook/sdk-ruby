@@ -16,6 +16,23 @@ module Hivehook
         @transport.execute(query, vars)["streamSinks"]
       end
 
+      def iterate(stream_id, options = {})
+        return enum_for(:iterate, stream_id, options) unless block_given?
+
+        opts = options.dup
+        offset = opts[:offset] || 0
+        loop do
+          opts[:offset] = offset
+          conn = list(stream_id, opts)
+          nodes = conn["nodes"] || []
+          nodes.each { |node| yield node }
+          page_info = conn["pageInfo"] || {}
+          break if !page_info["hasNextPage"] || nodes.empty?
+
+          offset += nodes.length
+        end
+      end
+
       def get(id)
         query = "query($id: UUID!) { streamSink(id: $id) { #{FRAGMENT} } }"
         @transport.execute(query, { "id" => id })["streamSink"]
