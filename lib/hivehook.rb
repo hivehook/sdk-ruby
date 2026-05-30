@@ -29,6 +29,7 @@ require_relative "hivehook/resources/stream_sink_service"
 require_relative "hivehook/resources/organization_service"
 require_relative "hivehook/resources/user_service"
 require_relative "hivehook/resources/audit_log_service"
+require_relative "hivehook/resources/meta_event_config_service"
 
 module Hivehook
   class Client
@@ -37,7 +38,7 @@ module Hivehook
                 :applications, :endpoints, :messages, :outbound_deliveries,
                 :outbound_dlq, :status, :transformations, :portal,
                 :streams, :stream_consumers, :stream_sinks,
-                :organizations, :users, :audit_logs
+                :organizations, :users, :audit_logs, :meta_event_configs
 
     def initialize(base_url: "http://localhost:8080", api_key: nil,
                    open_timeout: GraphQLTransport::DEFAULT_OPEN_TIMEOUT,
@@ -71,6 +72,7 @@ module Hivehook
       @organizations = Resources::OrganizationService.new(transport)
       @users = Resources::UserService.new(transport)
       @audit_logs = Resources::AuditLogService.new(transport)
+      @meta_event_configs = Resources::MetaEventConfigService.new(transport)
     end
   end
 end

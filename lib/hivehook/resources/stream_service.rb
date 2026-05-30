@@ -34,6 +34,21 @@ module Hivehook
         query = "mutation($id: UUID!) { deleteStream(id: $id) }"
         @transport.execute(query, { "id" => id })["deleteStream"]
       end
+
+      ENTRY_FRAGMENT = "id streamId sequence messageId eventType payload createdAt"
+
+      def entries(stream_id, after_sequence: nil, limit: nil)
+        query = "query($streamId: UUID!, $afterSequence: Int, $limit: Int) {
+          streamEntries(streamId: $streamId, afterSequence: $afterSequence, limit: $limit) {
+            nodes { #{ENTRY_FRAGMENT} }
+            pageInfo { total limit offset endCursor hasNextPage }
+          }
+        }"
+        vars = { "streamId" => stream_id }
+        vars["afterSequence"] = after_sequence unless after_sequence.nil?
+        vars["limit"] = limit unless limit.nil?
+        @transport.execute(query, vars)["streamEntries"]
+      end
     end
   end
 end
